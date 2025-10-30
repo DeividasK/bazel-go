@@ -1,4 +1,4 @@
-Bazel vs Go cache
+Bazel vs Go speed
 
 ```sh
 bazel test //...

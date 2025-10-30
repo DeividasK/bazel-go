@@ -5,6 +5,7 @@ go_library(
     srcs = ["c.go"],
     importpath = "bazel-go/b/c",
     visibility = ["//visibility:public"],
+    deps = ["//a"],
 )
 
 go_test(
