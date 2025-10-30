@@ -1,0 +1,14 @@
+load("@rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "c",
+    srcs = ["c.go"],
+    importpath = "bazel-go/b/c",
+    visibility = ["//visibility:public"],
+)
+
+go_test(
+    name = "c_test",
+    srcs = ["c_test.go"],
+    embed = [":c"],
+)
