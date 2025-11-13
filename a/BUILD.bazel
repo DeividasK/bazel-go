@@ -5,6 +5,7 @@ go_library(
     srcs = ["a.go"],
     importpath = "bazel-go/a",
     visibility = ["//visibility:public"],
+    deps = ["@com_github_smartcontractkit_chainlink_common//pkg/types/chains/evm"],
 )
 
 go_test(

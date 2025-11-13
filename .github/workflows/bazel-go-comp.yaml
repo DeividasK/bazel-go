@@ -1,0 +1,78 @@
+name: bazel
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  merge_group:
+  workflow_dispatch:
+
+env:
+  GO_VERSION: 1.25.3
+
+jobs:
+  bazel_test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Tidy
+        run: |
+          bazel mod tidy
+      - name: Ensure no diff
+        run: |
+          git diff
+          git diff --stat --exit-code
+
+      - name: Bazel (re)generate
+        run: |
+          bazel run //:gazelle --config=ci \
+            --remote_header=x-buildbuddy-api-key=${{ secrets.BUILDBUDDY_API_KEY }} \
+            --build_metadata=ROLE=CI \
+            --build_metadata=COMMIT_SHA=${{ github.sha }} \
+            --build_metadata=BRANCH_NAME=${{ github.head_ref || github.ref_name }}
+      - name: Ensure no diff
+        run: |
+          git diff
+          git diff --stat --exit-code
+
+      - name: Test
+        run: |
+          bazel test //... --config=ci \
+            --remote_header=x-buildbuddy-api-key=${{ secrets.BUILDBUDDY_API_KEY }} \
+            --build_metadata=ROLE=CI \
+            --build_metadata=COMMIT_SHA=${{ github.sha }} \
+            --build_metadata=BRANCH_NAME=${{ github.head_ref || github.ref_name }}
+
+  go_test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Tidy
+        run: go mod tidy
+
+      - name: Ensure no diff
+        run: |
+          git diff
+          git diff --stat --exit-code
+
+      - name: Test
+        run: go test -race ./...

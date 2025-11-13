@@ -1,0 +1,9 @@
+common:ci --bes_results_url=https://app.buildbuddy.io/invocation/
+common:ci --bes_backend=grpcs://remote.buildbuddy.io
+common:ci --remote_cache=grpcs://remote.buildbuddy.io
+common:ci --remote_timeout=10m
+common:ci --remote_cache_compression
+
+# CI configuration
+common:ci --@rules_go//go/config:race
+test:ci --test_output=errors
