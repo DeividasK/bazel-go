@@ -4,8 +4,9 @@ import "testing"
 
 func TestFoo(t *testing.T) {
 	result := Foo()
-	if result != "Bar" {
-		t.Errorf("Expected Bar, got %s", result)
+	expected := "Bar"
+	if result != expected {
+		t.Errorf("Expected %s, got %s", expected, result)
 	}
 }
 
