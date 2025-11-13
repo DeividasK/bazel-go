@@ -11,7 +11,9 @@ func TestFoo(t *testing.T) {
 
 func TestBaz(t *testing.T) {
 	result := Baz()
-	if result != "Hello Baz" {
-		t.Errorf("Expected Hello Baz, got %s", result)
+
+	expected := "Address: 0x1234567890123456789012345678901234567890; Hello Baz"
+	if result != expected {
+		t.Errorf("Expected %s, got %s", expected, result)
 	}
 }
