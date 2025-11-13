@@ -8,7 +8,7 @@ func TestFoo(t *testing.T) {
 	if result != expected {
 		t.Errorf("Expected %s, got %s", expected, result)
 	}
-	t.Logf("Foo trivial change: %s", result)
+	t.Logf("Foo result: %s", result)
 }
 
 func TestBaz(t *testing.T) {
